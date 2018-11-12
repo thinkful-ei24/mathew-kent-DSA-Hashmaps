@@ -156,7 +156,7 @@ function anagramGrouping(words) {
 
   function startHashMap(word, hashMap) {
     for (let i = 0; i < word.length; i++) {
-      hashMap.set(word[i], 1)
+      hashMap.set(word[i], 1);
     }
 
     return hashMap;
@@ -164,33 +164,38 @@ function anagramGrouping(words) {
 
   hashMapArray[0] = startHashMap(workingWord, new HashMap());
 
-
-  for (let j = 1; j < words.length; j++ ) {
-    let checkWord = words[j];
-    let exists;
-
-    for (let k = 0; k < hashMapArray.length; k++) {
-      for (let i = 0; i < checkWord.length; i++ ) {
+  function isAnagram(word, hashmap) {
+    let ret = true;
+    for (let i=0; i<word.length; i++) {
+      if (ret === true) {
         try {
-          exists = hashMapArray[k].get(checkWord[i]) ? true : false;
-          
+          hashmap.get(word[i]);
         } catch (e) {
-          hashMapArray.push(startHashMap(checkWord, new HashMap()));
-          console.log(k, 'the kth hash map is ', hashMapArray[k])
-          totalWordArray.push([checkWord]);
-          exists = false;
-          break;
+          ret = false;
         }
       }
-      if (exists){
-            totalWordArray[k].push(checkWord);
-          } else {
-            break;
-          }
-    
+    }
+    return ret;
+  }
+
+  for (let j = 1; j < words.length; j++) {
+    let checkWord = words[j];
+    let exists = false;
+
+    for (let k = 0; k < hashMapArray.length; k++) {
+      exists = isAnagram(checkWord, hashMapArray[k]);
+
+      if (exists) {
+        totalWordArray[k].push(checkWord);
+        break;
+      }
+    }
+
+    if (!exists) {
+      hashMapArray.push(startHashMap(checkWord, new HashMap()));
+      totalWordArray.push([checkWord]);
     }
   }
-  console.log(hashMapArray.length)
 
   return totalWordArray;
 }
@@ -198,4 +203,4 @@ function anagramGrouping(words) {
 // input: ['east', 'cars', 'acre', 'arcs', 'teas', 'eats', 'race']
 // output: [['east', 'teas', 'eats'], ['cars', 'arcs'], ['acre', 'race']]
 
-console.log(anagramGrouping(['east', 'cars', 'acre', 'arcs', 'teas', 'eats', 'race']))
+console.log(anagramGrouping(['east', 'cars', 'acre', 'arcs', 'teas', 'eats', 'race']));
