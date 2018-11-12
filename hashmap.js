@@ -102,8 +102,8 @@ lor.set('LadyOfLight', 'Galadriel');
 lor.set('HalfElven', 'Arwen');
 lor.set('Ent', 'Treebeard');
 // console.log(lor.get('Hobbit'))
-serialize(lor);
-console.log(lor.get('Maiar'));
+// serialize(lor);
+// console.log(lor.get('Maiar'));
 
 // input: String, example: acecarr
 // output: Bool, example, true
@@ -133,3 +133,69 @@ function palindrome(str) {
   }
   return true;
 }
+
+
+//////////////////////////////////////////////////////
+// Anagram Grouping
+// input: ['east', 'cars', 'acre', 'arcs', 'teas', 'eats', 'race']
+// output: [['east', 'teas', 'eats'], ['cars', 'arcs'], ['acre', 'race']]
+
+// get first word workingWord
+// put first word into a HashMap and into first element of TotalWordArray
+// get second word
+// loop through second word checkWord
+//  Check every letter to be inside first word hash map
+//  if letter is not in first word HM, create a new hash map for new word
+//  else put newWord into firstWord array
+// return totalWordArray
+
+function anagramGrouping(words) {
+  let workingWord = words[0];
+  let totalWordArray = [[workingWord]];
+  let hashMapArray = [];
+
+  function startHashMap(word, hashMap) {
+    for (let i = 0; i < word.length; i++) {
+      hashMap.set(word[i], 1)
+    }
+
+    return hashMap;
+  }
+
+  hashMapArray[0] = startHashMap(workingWord, new HashMap());
+
+
+  for (let j = 1; j < words.length; j++ ) {
+    let checkWord = words[j];
+    let exists;
+
+    for (let k = 0; k < hashMapArray.length; k++) {
+      for (let i = 0; i < checkWord.length; i++ ) {
+        try {
+          exists = hashMapArray[k].get(checkWord[i]) ? true : false;
+          
+        } catch (e) {
+          hashMapArray.push(startHashMap(checkWord, new HashMap()));
+          console.log(k, 'the kth hash map is ', hashMapArray[k])
+          totalWordArray.push([checkWord]);
+          exists = false;
+          break;
+        }
+      }
+      if (exists){
+            totalWordArray[k].push(checkWord);
+          } else {
+            break;
+          }
+    
+    }
+  }
+  console.log(hashMapArray.length)
+
+  return totalWordArray;
+}
+
+// input: ['east', 'cars', 'acre', 'arcs', 'teas', 'eats', 'race']
+// output: [['east', 'teas', 'eats'], ['cars', 'arcs'], ['acre', 'race']]
+
+console.log(anagramGrouping(['east', 'cars', 'acre', 'arcs', 'teas', 'eats', 'race']))
